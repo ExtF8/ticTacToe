@@ -6,6 +6,12 @@
         <title>Tic Tac Toe</title>
         <link rel="stylesheet" href="reset.css" />
         <link rel="stylesheet" href="style.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <body>
         <!-- Header -->
@@ -18,42 +24,55 @@
         <main class="main-content-container">
             <!-- game container -->
             <section class="game-container">
-                <section class="player-container">
-                    <p>Xs</p>
-                    <div class="marker x-marker">X</div>
-                    <!-- score for X -->
-                    <div class="player-score-container">
-                        <h2>Score:</h2>
-                        <p>1</p>
-                    </div>
-                </section>
-                <!-- game grid -->
-                <section class="game-grid">
-                    <!-- game cells -->
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                </section>
-                <!-- aside for X -->
-                <!-- aside for O -->
-                <section class="player-container">
-                    <p>Os</p>
-                    <div class="marker o-marker">O</div>
-                    <!-- score for O -->
-                    <div class="player-score-container">
-                        <h2>Score:</h2>
-                        <p>1</p>
-                    </div>
-                </section>
+                <div class="game">
+                    <section class="player-container">
+                        <p>Xs</p>
+                        <div class="marker x-marker">X</div>
+                        <!-- score for X -->
+                        <div class="player-score-container">
+                            <h2>Score:</h2>
+                            <p>1</p>
+                        </div>
+                    </section>
+                    <!-- game grid -->
+                    <section class="game-grid">
+                        <!-- game cells -->
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                        <div class="cell"></div>
+                    </section>
+                    <!-- aside for X -->
+                    <!-- aside for O -->
+                    <section class="player-container">
+                        <p>Os</p>
+                        <div class="marker o-marker">O</div>
+                        <!-- score for O -->
+                        <div class="player-score-container">
+                            <h2>Score:</h2>
+                            <p>1</p>
+                        </div>
+                    </section>
+                </div>
+
                 <!-- start / restart button should change button label after game starts or ends  -->
+                <div class="button-container">
+                    <p>*</p>
+                    <p>*</p>
+                    <p>*</p>
+                    <button class="game-button" id="gameButton">
+                        START GAME
+                    </button>
+                    <p>*</p>
+                    <p>*</p>
+                    <p>*</p>
+                </div>
             </section>
-            <button id="gameButton">Start</button>
         </main>
         <!-- Footer -->
         <footer>
