@@ -16,8 +16,8 @@ header {
     width: 100%;
     margin-bottom: 25px;
     border: none;
-    background-color: #d1d5db;
-    box-shadow: 0px 20px 20px 20px rgba(0, 0, 0, 0.1);
+    /* background-color: #d1d5db;
+    box-shadow: 0px 20px 20px 20px rgba(0, 0, 0, 0.1); */
 }
 
 header h1 {
@@ -46,18 +46,36 @@ header p {
 .game-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
 }
 
 .cell {
     width: 100px;
     height: 100px;
-    border: 0.5px solid #d1d5db;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 36px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    /* transition: background-color 0.3s; */
+
+    --b: 1px;
+    /* border thickness */
+    --s: .2em;
+    /* size of the corner */
+    --color: #d1d5db;
+
+    padding: calc(.1em + var(--s)) calc(.1em + var(--s));
+    --_p: var(--s);
+    background:
+        conic-gradient(from 90deg at var(--b) var(--b), #0000 90deg, var(--color) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+    transition: .3s ease-in, color 0.2s, background-color 0.2s;
+
+    border: 0;
+
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
 .cell:hover {
@@ -65,7 +83,7 @@ header p {
 }
 
 .player-container {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -76,7 +94,7 @@ header p {
 }
 
 .player-score-container {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -125,9 +143,8 @@ footer {
     justify-content: center;
     gap: 6px;
     width: 100%;
-    /* margin: 12px; */
-    background-color: #d1d5db;
-    box-shadow: 0px -10px 10px 4px rgba(0, 0, 0, 0.1);
+    /* background-color: #d1d5db;
+    box-shadow: 0px -10px 10px 4px rgba(0, 0, 0, 0.1); */
 }
 
 footer p {
