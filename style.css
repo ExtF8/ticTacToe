@@ -11,13 +11,10 @@ body {
 header {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
     width: 100%;
     margin-bottom: 25px;
     border: none;
-    /* background-color: #d1d5db;
-    box-shadow: 0px 20px 20px 20px rgba(0, 0, 0, 0.1); */
 }
 
 header h1 {
@@ -57,7 +54,6 @@ header p {
     justify-content: center;
     font-size: 36px;
     cursor: pointer;
-    /* transition: background-color 0.3s; */
 
     --b: 1px;
     /* border thickness */
@@ -79,25 +75,26 @@ header p {
 }
 
 .cell:hover {
-    /* background-color: #f0f1f3; */
     transform: scale(1.03);
-
 }
 
 .player-container {
-    /* border: 1px solid red; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    
     width: 100px;
     margin: 20px;
     padding: 10px;
 }
+.cell#symbol-x, .cell#symbol-o {
+    border: 0;
+    padding: 0;
+    transform: none;
+    background: none;
+}
 
 .player-score-container {
-    /* border: 1px solid blue; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -109,11 +106,9 @@ header p {
     display: flex;
     margin: 30px;
     justify-content: space-evenly;
-    /* gap: 30px; */
 }
 
 .button-container>p {
-    /* border: 1px solid red; */
     align-self: center;
     padding-top: 10px;
     margin-inline: 5px;
@@ -134,8 +129,6 @@ header p {
 }
 
 .game-button:hover {
-    /* background-color: #d1d5db; */
-    /* color: #fff; */
     transform: scale(1.03);
 }
 
@@ -146,8 +139,6 @@ footer {
     justify-content: center;
     gap: 6px;
     width: 100%;
-    /* background-color: #d1d5db;
-    box-shadow: 0px -10px 10px 4px rgba(0, 0, 0, 0.1); */
 }
 
 footer p {
@@ -170,40 +161,36 @@ footer>a:hover {
 }
 
 /* Styling for the X symbol */
-.x::before,
-.x::after {
+.cell.x::before,
+.cell.x::after {
     content: "";
     position: absolute;
     width: 3px;
     height: 70px;
-    /* Adjust this value to fit the cell size */
     background-color: #333;
-    /* Color of the X */
     transform-origin: center;
     box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.2);
 
 }
 
-.x::before {
+
+.cell.x::before {
     transform: rotate(45deg);
 }
 
-.x::after {
+.cell.x::after {
     transform: rotate(-45deg);
 }
 
+
 /* Styling for the O symbol */
-.o::before,
-.o::after {
+.cell.o::before,
+.cell.o::after {
     content: "";
     position: absolute;
     width: 60px;
-    /* Adjust this value to fit the cell size */
     height: 60px;
-    /* background-color: transparent; */
-    /* Color of the O */
     border-radius: 50px;
-    /* Rounded edges for a circular appearance */
     border: 3px solid #333;
     box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.1);
 }
