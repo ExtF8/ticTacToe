@@ -24,9 +24,13 @@
         <main class="main-content-container">
             <!-- game container -->
             <section class="game-container">
+                <div class="winner" >
+                    <p id="winner">Xs or Os WINS</p>
+                </div>
                 <div class="game">
                     <!-- aside for X -->
                     <section class="player-container">
+                        <div class="rhombus"></div>
                         <p>Xs</p>
                         <div class="cell x" id="symbol-x"></div>
                         <!-- score for X -->
@@ -34,6 +38,14 @@
                             <h2>Score:</h2>
                             <p>1</p>
                         </div>
+                        <div class="line-container">
+                            <div class="line"></div>
+                            <div class="line-dotted"></div>
+                            <div class="line-dotted"></div>
+                            <div class="line-dotted"></div>
+                            <div class="line-dotted"></div>
+                        </div>
+                        <div class="rhombus"></div>
                     </section>
                     <!-- game grid -->
                     <section class="game-grid">
@@ -50,6 +62,7 @@
                     </section>
                     <!-- aside for O -->
                     <section class="player-container">
+                        <div class="rhombus"></div>
                         <p>Os</p>
                         <div class="cell o" id="symbol-o"></div>
                         <!-- score for O -->
@@ -57,21 +70,30 @@
                             <h2>Score:</h2>
                             <p>1</p>
                         </div>
+                        <div class="line-container">
+                            <div class="line"></div>
+                            <div class="line-dotted"></div>
+                            <div class="line-dotted"></div>
+                            <div class="line-dotted"></div>
+                            <div class="line-dotted"></div>
+                        </div>
+                        <div class="rhombus"></div>
                     </section>
                 </div>
 
                 <!-- start / restart button should change button label after game starts or ends  -->
                 <div class="button-container">
-                    <p>*</p>
-                    <p>*</p>
-                    <p>*</p>
+                    <p>·</p>
+                    <p>·</p>
+                    <p>·</p>
                     <button class="game-button" id="gameButton">
                         START GAME
                     </button>
-                    <p>*</p>
-                    <p>*</p>
-                    <p>*</p>
+                    <p>·</p>
+                    <p>·</p>
+                    <p>·</p>
                 </div>
+
             </section>
         </main>
         <!-- Footer -->

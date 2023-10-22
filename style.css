@@ -36,6 +36,15 @@ header p {
     box-shadow: -5px 10px 10px 4px rgba(0, 0, 0, 0.1);
 }
 
+.winner {
+    height: 27.2px;
+    margin-bottom: 20px;
+}
+
+.winner p {
+    font-size: 1.7rem;
+}
+
 .game {
     display: flex;
 }
@@ -76,6 +85,7 @@ header p {
 
 .cell:hover {
     transform: scale(1.03);
+    /* box-shadow: -3px 3px 5px 2px rgba(0, 0, 0, 0.1); */
 }
 
 .player-container {
@@ -87,7 +97,9 @@ header p {
     margin: 20px;
     padding: 10px;
 }
-.cell#symbol-x, .cell#symbol-o {
+
+.cell#symbol-x,
+.cell#symbol-o {
     border: 0;
     padding: 0;
     transform: none;
@@ -110,8 +122,10 @@ header p {
 
 .button-container>p {
     align-self: center;
-    padding-top: 10px;
     margin-inline: 5px;
+    font-family: inherit;
+    font-size: 30px;
+    color: #333;
 }
 
 .game-button {
@@ -125,10 +139,10 @@ header p {
     cursor: pointer;
     border-radius: 20px;
     transition: transform 0.3s;
-    box-shadow: -3px 3px 5px 2px rgba(0, 0, 0, 0.1);
 }
 
 .game-button:hover {
+    box-shadow: -3px 3px 5px 2px rgba(0, 0, 0, 0.1);
     transform: scale(1.03);
 }
 
@@ -147,7 +161,6 @@ footer p {
 
 footer>p:first-child {
     color: #8c8c8c;
-
 }
 
 footer>a:link {
@@ -161,8 +174,8 @@ footer>a:hover {
 }
 
 /* Styling for the X symbol */
-.cell.x::before,
-.cell.x::after {
+.x::before,
+.x::after {
     content: "";
     position: absolute;
     width: 3px;
@@ -170,22 +183,19 @@ footer>a:hover {
     background-color: #333;
     transform-origin: center;
     box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.2);
-
 }
 
-
-.cell.x::before {
+.x::before {
     transform: rotate(45deg);
 }
 
-.cell.x::after {
+.x::after {
     transform: rotate(-45deg);
 }
 
-
 /* Styling for the O symbol */
-.cell.o::before,
-.cell.o::after {
+.o::before,
+.o::after {
     content: "";
     position: absolute;
     width: 60px;
@@ -193,4 +203,28 @@ footer>a:hover {
     border-radius: 50px;
     border: 3px solid #333;
     box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+.line-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 70%;
+    height: 40%;
+}
+
+.line {
+    border: 0.1px solid rgba(0, 0, 0, 0.3);
+}
+
+.line-dotted {
+    border: 0.1px dotted rgba(0, 0, 0, 0.3)
+}
+
+.rhombus {
+    width: 7px;
+    height: 7px;
+    border: 0.1px solid rgba(0, 0, 0, 0.3);
+    transform-origin: center;
+    transform: rotate(45deg);
 }
