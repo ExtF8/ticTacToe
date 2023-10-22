@@ -4,18 +4,29 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Tic Tac Toe</title>
-        <link rel="stylesheet" href="reset.css">
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="reset.css" />
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <!-- Header -->
         <header>
+            <p>xox</p>
             <h1>TIC-TAC-TOE</h1>
+            <p>oxo</p>
         </header>
         <!-- Main -->
-        <main>
+        <main class="main-content-container">
             <!-- game container -->
             <section class="game-container">
+                <section class="player-container">
+                    <p>Xs</p>
+                    <div class="marker x-marker">X</div>
+                    <!-- score for X -->
+                    <div class="player-score-container">
+                        <h2>Score:</h2>
+                        <p>1</p>
+                    </div>
+                </section>
                 <!-- game grid -->
                 <section class="game-grid">
                     <!-- game cells -->
@@ -28,27 +39,26 @@
                     <div class="cell"></div>
                     <div class="cell"></div>
                     <div class="cell"></div>
-                    <div class="cell"></div>
                 </section>
                 <!-- aside for X -->
-                <section class="x-player-container">
-                    <div class="cell X"></div>
-                    <!-- score for X -->
-                    <div class="x-player-score"></div>
-                </section>
                 <!-- aside for O -->
-                <section class="o-player-container">
-                    <div class="cell O"></div>
+                <section class="player-container">
+                    <p>Os</p>
+                    <div class="marker o-marker">O</div>
                     <!-- score for O -->
-                    <div class="o-player-score"></div>
+                    <div class="player-score-container">
+                        <h2>Score:</h2>
+                        <p>1</p>
+                    </div>
                 </section>
-                <!-- start / restart button change button label after game starts or ends  -->
-                <button id="gameButton">Start</button>
-
+                <!-- start / restart button should change button label after game starts or ends  -->
             </section>
-
+            <button id="gameButton">Start</button>
         </main>
         <!-- Footer -->
-        <footer></footer>
+        <footer>
+            <p>Developed by</p>
+            <a href="https://github.com/ExtF8" target="_blank"><p>ExtF8</p></a>
+        </footer>
     </body>
 </html>
