@@ -16,7 +16,6 @@ const GameBoard = (() => {
     };
 
     // Function to reset the board
-
     const resetBoard = () => {
         board = ['', '', '', '', '', '', '', '', ''];
     };
@@ -108,6 +107,13 @@ const DisplayController = (() => {
         }
     };
 
+    const clearBoard = () => {
+        cells.forEach((cell) => {
+            cell.classList.remove('x');
+            cell.classList.remove('o');
+        });
+    };
+
     // Function to update the game board UI, and add click event
     const renderBoard = () => {
         const board = GameBoard.getBoard();
@@ -133,7 +139,7 @@ const DisplayController = (() => {
 
     gameButton.addEventListener('click', () => {
         GameController.restartGame();
-        console.log('gameButton')
+        clearBoard();
     });
 
     return {
