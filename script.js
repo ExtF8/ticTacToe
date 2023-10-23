@@ -56,6 +56,14 @@ const GameController = (() => {
     // Current player
     let currentPlayer = player1;
 
+    // State of the game
+    let gameStarted = false;
+
+    // Function to start the game
+    const startGame = () => {
+        gameStarted = true;
+    };
+
     // Switch current player
     const switchPlayer = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
@@ -83,11 +91,14 @@ const GameController = (() => {
     // Function for resetting the game board
     const restartGame = () => {
         GameBoard.resetBoard();
+        gameStarted = false;
     };
 
     return {
         playTurn,
+        startGame,
         restartGame,
+        gameStarted: () => gameStarted,
     };
 })();
 
@@ -96,6 +107,39 @@ const DisplayController = (() => {
     const cells = document.querySelectorAll('.cell');
     const winnerElement = document.getElementById('winner');
     const gameButton = document.getElementById('gameButton');
+
+    const gameBoardContainer = document.querySelector('.game-board');
+
+    // Function to manage hover class based on game state
+    const manageHoverClass = (add) => {
+        if (add) {
+            gameBoardContainer.classList.remove('no-hover');
+        } else {
+            gameBoardContainer.classList.add('no-hover');
+        }
+    };
+
+    // Function to manage click events
+    const manageCellEvents = (add) => {
+        cells.forEach((cell) => {
+            if (add) {
+                cell.addEventListener('click', cellClickHandler);
+                cell.classList.add(':hover');
+            } else {
+                cell.removeEventListener('click', cellClickHandler);
+                cell.classList.remove(':hover');
+            }
+        });
+    };
+
+    // Cell click event handler
+    const cellClickHandler = (event) => {
+        const index = Array.from(cells).indexOf(event.currentTarget);
+        if (GameController.gameStarted()) {
+            GameController.playTurn(index);
+            updateUI(index, GameBoard.getBoard());
+        }
+    };
 
     // Update ui
     const updateUI = (index, board) => {
@@ -119,11 +163,27 @@ const DisplayController = (() => {
         const board = GameBoard.getBoard();
         cells.forEach((cell, index) => {
             cell.addEventListener('click', () => {
-                GameController.playTurn(index);
-                updateUI(index, board);
-                console.log(board);
+                // Check if the game has started
+                if (GameController.gameStarted()) {
+                    GameController.playTurn(index);
+                    updateUI(index, board);
+                    console.log(board);
+                }
             });
         });
+    };
+
+    // Function to update game button label
+    const updateButtonLabel = () => {
+        if (GameController.gameStarted()) {
+            gameButton.textContent = 'RESTART GAME';
+            manageCellEvents(true);
+            manageHoverClass(true);
+        } else {
+            gameButton.textContent = 'START GAME';
+            manageCellEvents(false);
+            manageHoverClass(false);
+        }
     };
 
     // Function to update UI with winner
@@ -138,18 +198,25 @@ const DisplayController = (() => {
     };
 
     gameButton.addEventListener('click', () => {
-        GameController.restartGame();
+        if (GameController.gameStarted()) {
+            GameController.restartGame();
+        } else {
+            GameController.startGame();
+        }
         clearBoard();
+        updateButtonLabel();
     });
 
     return {
         renderBoard,
         updateWinner,
         updateScore,
+        updateButtonLabel,
     };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initial render of the game board
     DisplayController.renderBoard();
+    DisplayController.updateButtonLabel();
 });

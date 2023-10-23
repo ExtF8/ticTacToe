@@ -88,6 +88,11 @@ header p {
     /* box-shadow: -3px 3px 5px 2px rgba(0, 0, 0, 0.1); */
 }
 
+.game-board.no-hover .cell:hover {
+    transform: none;
+    cursor: initial;
+}
+
 .player-container {
     display: flex;
     flex-direction: column;
@@ -123,6 +128,7 @@ header p {
 }
 
 .game-button {
+    width: 184px;
     margin-inline: 20px;
     padding: 10px 25px;
     border: 0.5px solid #d1d5db;
