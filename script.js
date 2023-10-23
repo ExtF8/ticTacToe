@@ -98,18 +98,23 @@ const DisplayController = (() => {
     const winnerElement = document.getElementById('winner');
     const gameButton = document.getElementById('gameButton');
 
+    // Update ui
+    const updateUI = (index, board) => {
+        const cell = cells[index];
+        if (board[index] === 'X') {
+            cell.classList.add('x');
+        } else if (board[index] === 'O') {
+            cell.classList.add('o');
+        }
+    };
+
     // Function to update the game board UI, and add click event
     const renderBoard = () => {
         const board = GameBoard.getBoard();
         cells.forEach((cell, index) => {
             cell.addEventListener('click', () => {
                 GameController.playTurn(index);
-                if (board[index] === 'X') {
-                    cell.classList.add('x');
-                } else if (board[index] === 'O') {
-                    cell.classList.add('o');
-                }
-                renderBoard();
+                updateUI(index, board);
                 console.log(board);
             });
         });
@@ -126,7 +131,10 @@ const DisplayController = (() => {
         scoreElement.textContent = player.getScore();
     };
 
-    gameButton.addEventListener('click', () => GameController.restartGame());
+    gameButton.addEventListener('click', () => {
+        GameController.restartGame();
+        console.log('gameButton')
+    });
 
     return {
         renderBoard,
