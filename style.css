@@ -199,46 +199,14 @@ footer>a:hover {
     box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* Styling for the X symbol for player */
+/* Styling for the X and O symbol for the players */
 #symbol-x,
 #symbol-o {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 36px;
     width: 100px;
     height: 100px;
-}
-
-.symbolX::before,
-.symbolX::after {
-    content: "";
-    position: absolute;
-    width: 3px;
-    height: 70px;
-    background-color: #333;
-    transform-origin: center;
-    box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.2);
-}
-
-.symbolX::before {
-    transform: rotate(45deg);
-}
-
-.symbolX::after {
-    transform: rotate(-45deg);
-}
-
-/* Styling for the O symbol */
-.symbolO::before,
-.symbolO::after {
-    content: "";
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    border-radius: 50px;
-    border: 3px solid #333;
-    box-shadow: -2px 5px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
 .line-container {
