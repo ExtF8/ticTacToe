@@ -70,6 +70,10 @@ const GameController = (() => {
         console.log(currentPlayer);
     };
 
+    const getCurrentPlayer = () => {
+        return currentPlayer;
+    };
+
     // Function for marking cell with current players mark when cell is clicked
     const playTurn = (index) => {
         if (GameBoard.setCell(index, currentPlayer.marker)) {
@@ -99,6 +103,7 @@ const GameController = (() => {
         startGame,
         restartGame,
         gameStarted: () => gameStarted,
+        getCurrentPlayer,
     };
 })();
 
@@ -107,7 +112,6 @@ const DisplayController = (() => {
     const cells = document.querySelectorAll('.cell');
     const winnerElement = document.getElementById('winner');
     const gameButton = document.getElementById('gameButton');
-
     const gameBoardContainer = document.querySelector('.game-board');
 
     // Function to manage hover class based on game state
@@ -124,30 +128,53 @@ const DisplayController = (() => {
         cells.forEach((cell) => {
             if (add) {
                 cell.addEventListener('click', cellClickHandler);
-                cell.classList.add(':hover');
             } else {
                 cell.removeEventListener('click', cellClickHandler);
-                cell.classList.remove(':hover');
             }
         });
     };
 
     // Cell click event handler
     const cellClickHandler = (event) => {
-        const index = Array.from(cells).indexOf(event.currentTarget);
-        if (GameController.gameStarted()) {
+        console.log('cellClickHandler called');
+        const cell = event.currentTarget;
+        const index = Array.from(cells).indexOf(cell);
+        console.log(`Index: ${index}`);
+        console.log(`Game started: ${GameController.gameStarted()}`);
+
+        if (!GameController.gameStarted()) {
+            return;
+        }
+
+        if (
+            GameBoard.setCell(index, GameController.getCurrentPlayer().marker)
+        ) {
+            console.log('Cell set successfully');
             GameController.playTurn(index);
             updateUI(index, GameBoard.getBoard());
+            removeEventListenerFromCell(cell);
+        } else {
+            console.log('Failed to set cell');
         }
+    };
+
+    const removeEventListenerFromCell = (cell) => {
+        console.log('Removing event listener from cell');
+        cell.removeEventListener('click', cellClickHandler);
     };
 
     // Update ui
     const updateUI = (index, board) => {
+        console.log(`Updating UI for index: ${index}`);
+        console.log(`Board state: ${JSON.stringify(board)}`);
         const cell = cells[index];
         if (board[index] === 'X') {
             cell.classList.add('x');
         } else if (board[index] === 'O') {
             cell.classList.add('o');
+        } else {
+            cell.classList.remove('x');
+            cell.classList.remove('o');
         }
     };
 
@@ -162,14 +189,7 @@ const DisplayController = (() => {
     const renderBoard = () => {
         const board = GameBoard.getBoard();
         cells.forEach((cell, index) => {
-            cell.addEventListener('click', () => {
-                // Check if the game has started
-                if (GameController.gameStarted()) {
-                    GameController.playTurn(index);
-                    updateUI(index, board);
-                    console.log(board);
-                }
-            });
+            updateUI(index, board);
         });
     };
 
