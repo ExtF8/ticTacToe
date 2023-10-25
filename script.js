@@ -81,7 +81,12 @@ const GameController = (() => {
             if (checkWin()) {
                 currentPlayer.incrementScore();
                 console.log(currentPlayer.name, currentPlayer.getScore());
-                DisplayController.updateScore(currentPlayer)
+                DisplayController.updateScore(currentPlayer);
+                gameStarted = false;
+                console.log(gameStarted);
+                DisplayController.manageCellEvents(false);
+                DisplayController.manageHoverClass(false);
+
             } else {
                 switchPlayer();
             }
@@ -124,6 +129,7 @@ const GameController = (() => {
         restartGame,
         gameStarted: () => gameStarted,
         getCurrentPlayer,
+        checkWin,
     };
 })();
 
@@ -194,6 +200,9 @@ const DisplayController = (() => {
             cell.classList.remove('x');
             cell.classList.remove('o');
         }
+        if (GameController.checkWin()) {
+            cell.classList.add('cell-winner')
+        }
     };
 
     const clearBoard = () => {
@@ -206,7 +215,7 @@ const DisplayController = (() => {
     // Function to update the game board UI, and add click event
     const renderBoard = () => {
         const board = GameBoard.getBoard();
-        
+
         cells.forEach((cell, index) => {
             updateUI(index, board);
         });
@@ -232,9 +241,7 @@ const DisplayController = (() => {
 
     // Function to update score
     const updateScore = (player) => {
-        const scoreElement = document.querySelector(
-            `#${player.marker}-score`
-        );
+        const scoreElement = document.querySelector(`#${player.marker}-score`);
         scoreElement.textContent = player.getScore();
     };
 
@@ -253,6 +260,8 @@ const DisplayController = (() => {
         updateWinner,
         updateScore,
         updateButtonLabel,
+        manageCellEvents,
+        manageHoverClass,
     };
 })();
 
@@ -261,6 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
     DisplayController.renderBoard();
     DisplayController.updateButtonLabel();
 
-    DisplayController.updateScore(Player('Xs', 'X'))
-    DisplayController.updateScore(Player('Os', 'O'))
+    DisplayController.updateScore(Player('Xs', 'X'));
+    DisplayController.updateScore(Player('Os', 'O'));
 });
