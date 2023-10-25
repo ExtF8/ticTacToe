@@ -53,7 +53,7 @@ const GameController = (() => {
     const player1 = Player('Xs', 'X');
     const player2 = Player('Os', 'O');
 
-    // Current player
+    // Current currentPlayer
     let currentPlayer = player1;
 
     // State of the game
@@ -64,7 +64,7 @@ const GameController = (() => {
         gameStarted = true;
     };
 
-    // Switch current player
+    // Switch current currentPlayer
     const switchPlayer = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         console.log(currentPlayer);
@@ -80,6 +80,8 @@ const GameController = (() => {
             // Check for win or tie
             if (checkWin()) {
                 currentPlayer.incrementScore();
+                console.log(currentPlayer.name, currentPlayer.getScore());
+                DisplayController.updateScore(currentPlayer)
             } else {
                 switchPlayer();
             }
@@ -90,6 +92,24 @@ const GameController = (() => {
     const checkWin = () => {
         const board = GameBoard.getBoard();
         // Logic for checking win
+        const winningCombinations = [
+            [0, 1, 2], // First row
+            [3, 4, 5], // Second row
+            [6, 7, 8], // Third row
+            [0, 3, 6], // First column
+            [1, 4, 7], // Second column
+            [2, 5, 8], // Third column
+            [0, 4, 8], // Diagonal from 0
+            [2, 4, 6], // Diagonal from 2
+        ];
+
+        for (let i = 0; i < winningCombinations.length; i++) {
+            const [a, b, c] = winningCombinations[i];
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return true;
+            }
+        }
+        return false;
     };
 
     // Function for resetting the game board
@@ -146,11 +166,9 @@ const DisplayController = (() => {
             return;
         }
 
-        if (
-            GameBoard.setCell(index, GameController.getCurrentPlayer().marker)
-        ) {
+        GameController.playTurn(index);
+        if (GameBoard.getBoard()[index] !== '') {
             console.log('Cell set successfully');
-            GameController.playTurn(index);
             updateUI(index, GameBoard.getBoard());
             removeEventListenerFromCell(cell);
         } else {
@@ -188,6 +206,7 @@ const DisplayController = (() => {
     // Function to update the game board UI, and add click event
     const renderBoard = () => {
         const board = GameBoard.getBoard();
+        
         cells.forEach((cell, index) => {
             updateUI(index, board);
         });
@@ -213,7 +232,9 @@ const DisplayController = (() => {
 
     // Function to update score
     const updateScore = (player) => {
-        const scoreElement = document.querySelector(`#${player.marker}-score`);
+        const scoreElement = document.querySelector(
+            `#${player.marker}-score`
+        );
         scoreElement.textContent = player.getScore();
     };
 
@@ -239,4 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial render of the game board
     DisplayController.renderBoard();
     DisplayController.updateButtonLabel();
+
+    DisplayController.updateScore(Player('Xs', 'X'))
+    DisplayController.updateScore(Player('Os', 'O'))
 });
