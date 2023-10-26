@@ -1,3 +1,5 @@
+// TODO refactor duplicated logic
+
 // Game board module
 const GameBoard = (() => {
     // Array of cells
