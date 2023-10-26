@@ -67,7 +67,6 @@ const GameController = (() => {
     // Switch current currentPlayer
     const switchPlayer = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
-        console.log(currentPlayer);
     };
 
     const getCurrentPlayer = () => {
@@ -80,13 +79,10 @@ const GameController = (() => {
             // Check for win or tie
             if (checkWin()) {
                 currentPlayer.incrementScore();
-                console.log(currentPlayer.name, currentPlayer.getScore());
-                DisplayController.updateScore(currentPlayer);
+                DisplayController.updateWinnerUI();
                 gameStarted = false;
-                console.log(gameStarted);
                 DisplayController.manageCellEvents(false);
                 DisplayController.manageHoverClass(false);
-
             } else {
                 switchPlayer();
             }
@@ -111,10 +107,10 @@ const GameController = (() => {
         for (let i = 0; i < winningCombinations.length; i++) {
             const [a, b, c] = winningCombinations[i];
             if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                return true;
+                return winningCombinations[i];
             }
         }
-        return false;
+        return null;
     };
 
     // Function for resetting the game board
@@ -162,11 +158,8 @@ const DisplayController = (() => {
 
     // Cell click event handler
     const cellClickHandler = (event) => {
-        console.log('cellClickHandler called');
         const cell = event.currentTarget;
         const index = Array.from(cells).indexOf(cell);
-        console.log(`Index: ${index}`);
-        console.log(`Game started: ${GameController.gameStarted()}`);
 
         if (!GameController.gameStarted()) {
             return;
@@ -174,34 +167,24 @@ const DisplayController = (() => {
 
         GameController.playTurn(index);
         if (GameBoard.getBoard()[index] !== '') {
-            console.log('Cell set successfully');
             updateUI(index, GameBoard.getBoard());
             removeEventListenerFromCell(cell);
-        } else {
-            console.log('Failed to set cell');
         }
     };
 
     const removeEventListenerFromCell = (cell) => {
-        console.log('Removing event listener from cell');
         cell.removeEventListener('click', cellClickHandler);
     };
 
     // Update ui
     const updateUI = (index, board) => {
-        console.log(`Updating UI for index: ${index}`);
-        console.log(`Board state: ${JSON.stringify(board)}`);
         const cell = cells[index];
         if (board[index] === 'X') {
             cell.classList.add('x');
         } else if (board[index] === 'O') {
             cell.classList.add('o');
         } else {
-            cell.classList.remove('x');
-            cell.classList.remove('o');
-        }
-        if (GameController.checkWin()) {
-            cell.classList.add('cell-winner')
+            clearBoard();
         }
     };
 
@@ -209,6 +192,8 @@ const DisplayController = (() => {
         cells.forEach((cell) => {
             cell.classList.remove('x');
             cell.classList.remove('o');
+            cell.classList.remove('cell-winner');
+            winnerElement.textContent = '';
         });
     };
 
@@ -234,15 +219,33 @@ const DisplayController = (() => {
         }
     };
 
-    // Function to update UI with winner
-    const updateWinner = (winnerName) => {
-        winnerElement.textContent = `${winnerName} WINS`;
-    };
-
     // Function to update score
     const updateScore = (player) => {
         const scoreElement = document.querySelector(`#${player.marker}-score`);
         scoreElement.textContent = player.getScore();
+    };
+    // Function to update UI with winner
+    const updateWinner = (winner) => {
+        winnerElement.textContent = `${winner} WINS`;
+    };
+
+    // Function colors winner cells
+    const updateWinnerCells = () => {
+        const winningCombination = GameController.checkWin()
+        if (winningCombination) {
+            winningCombination.forEach(index => {
+                cells[index].classList.add('cell-winner');
+            });
+        }
+    };
+
+    // Function updates UI based on winner
+    const updateWinnerUI = () => {
+        if (GameController.checkWin()) {
+            updateWinnerCells(cells);
+            updateWinner(GameController.getCurrentPlayer().name);
+            updateScore(GameController.getCurrentPlayer());
+        }
     };
 
     gameButton.addEventListener('click', () => {
@@ -262,6 +265,7 @@ const DisplayController = (() => {
         updateButtonLabel,
         manageCellEvents,
         manageHoverClass,
+        updateWinnerUI,
     };
 })();
 
