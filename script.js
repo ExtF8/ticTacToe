@@ -64,6 +64,7 @@ const GameController = (() => {
     // Function to start the game
     const startGame = () => {
         gameStarted = true;
+        currentPlayer = player1;
     };
 
     // Switch current currentPlayer
@@ -94,6 +95,7 @@ const GameController = (() => {
         gameStarted = false;
         DisplayController.manageCellEvents(false);
         DisplayController.manageHoverClass(false);
+        console.log('win');
     };
 
     // Function to check winner
@@ -123,7 +125,9 @@ const GameController = (() => {
     // Function for resetting the game board
     const restartGame = () => {
         GameBoard.resetBoard();
+        console.log(GameBoard.getBoard());
         gameStarted = false;
+        currentPlayer = player1;
     };
 
     return {
@@ -258,11 +262,19 @@ const DisplayController = (() => {
     gameButton.addEventListener('click', () => {
         if (GameController.gameStarted()) {
             GameController.restartGame();
+            console.log('restart');
         } else {
             GameController.startGame();
+            console.log('start');
         }
+        // GameController.restartGame();
+        console.log(GameBoard.getBoard());
+        GameBoard.resetBoard();
         clearBoard();
         updateButtonLabel();
+        console.log('update');
+
+        // manageCellEvents(GameController.gameStarted())
     });
 
     return {
