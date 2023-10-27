@@ -80,15 +80,20 @@ const GameController = (() => {
         if (GameBoard.setCell(index, currentPlayer.marker)) {
             // Check for win or tie
             if (checkWin()) {
-                currentPlayer.incrementScore();
-                DisplayController.updateWinnerUI();
-                gameStarted = false;
-                DisplayController.manageCellEvents(false);
-                DisplayController.manageHoverClass(false);
+                handleWin();
             } else {
                 switchPlayer();
             }
         }
+    };
+
+    // Function to handle win situation
+    const handleWin = () => {
+        currentPlayer.incrementScore();
+        DisplayController.updateWinnerUI();
+        gameStarted = false;
+        DisplayController.manageCellEvents(false);
+        DisplayController.manageHoverClass(false);
     };
 
     // Function to check winner
@@ -233,9 +238,9 @@ const DisplayController = (() => {
 
     // Function colors winner cells
     const updateWinnerCells = () => {
-        const winningCombination = GameController.checkWin()
+        const winningCombination = GameController.checkWin();
         if (winningCombination) {
-            winningCombination.forEach(index => {
+            winningCombination.forEach((index) => {
                 cells[index].classList.add('cell-winner');
             });
         }
