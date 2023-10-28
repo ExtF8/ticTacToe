@@ -1,4 +1,8 @@
 // TODO refactor duplicated logic
+// refactor unnecessary function calls
+// add checkWin check for tie
+// refactor button function calls
+// add current player turn indicator class in html css
 
 // Game board module
 const GameBoard = (() => {
@@ -267,14 +271,11 @@ const DisplayController = (() => {
             GameController.startGame();
             console.log('start');
         }
-        // GameController.restartGame();
         console.log(GameBoard.getBoard());
         GameBoard.resetBoard();
         clearBoard();
         updateButtonLabel();
         console.log('update');
-
-        // manageCellEvents(GameController.gameStarted())
     });
 
     return {
