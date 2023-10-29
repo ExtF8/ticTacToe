@@ -1,14 +1,24 @@
+// Constants
+const EMPTY_CELL = '';
+const PLAYER_X = 'X';
+const PLAYER_O = 'O';
+const WINNING_COMBINATIONS = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+    [0, 4, 8], [2, 4, 6], // Diagonals
+];
+
 // Game board module
 const GameBoard = (() => {
     // Array of cells
-    let board = ['', '', '', '', '', '', '', '', ''];
+    let board = Array(9).fill(EMPTY_CELL);
 
     // Function to return current state of the board
     const getBoard = () => [...board];
 
     // Function to set cell on the board at index
     const setCell = (index, marker) => {
-        if (board[index] === '') {
+        if (board[index] === EMPTY_CELL) {
             board[index] = marker;
             return true;
         }
@@ -17,7 +27,7 @@ const GameBoard = (() => {
 
     // Function to reset the board
     const resetBoard = () => {
-        board = ['', '', '', '', '', '', '', '', ''];
+        board = Array(9).fill(EMPTY_CELL);
     };
 
     return {
@@ -50,8 +60,8 @@ const Player = (name, marker) => {
 // Game controller module
 const GameController = (() => {
     // Player objects
-    const player1 = Player('Xs', 'X');
-    const player2 = Player('Os', 'O');
+    const player1 = Player('Xs', PLAYER_X);
+    const player2 = Player('Os', PLAYER_O);
 
     // Current currentPlayer
     let currentPlayer = player1;
@@ -101,21 +111,11 @@ const GameController = (() => {
     const checkWin = () => {
         const board = GameBoard.getBoard();
         // Logic for checking win
-        const winningCombinations = [
-            [0, 1, 2], // First row
-            [3, 4, 5], // Second row
-            [6, 7, 8], // Third row
-            [0, 3, 6], // First column
-            [1, 4, 7], // Second column
-            [2, 5, 8], // Third column
-            [0, 4, 8], // Diagonal from 0
-            [2, 4, 6], // Diagonal from 2
-        ];
 
-        for (let i = 0; i < winningCombinations.length; i++) {
-            const [a, b, c] = winningCombinations[i];
+        for (let i = 0; i < WINNING_COMBINATIONS.length; i++) {
+            const [a, b, c] = WINNING_COMBINATIONS[i];
             if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                return winningCombinations[i];
+                return WINNING_COMBINATIONS[i];
             }
         }
         return null;
@@ -276,7 +276,6 @@ const DisplayController = (() => {
     });
 
     return {
-        // renderBoard,
         updateWinner,
         updateScore,
         updateButtonLabel,
@@ -290,6 +289,6 @@ const DisplayController = (() => {
 document.addEventListener('DOMContentLoaded', () => {
     DisplayController.updateButtonLabel();
 
-    DisplayController.updateScore(Player('Xs', 'X'));
-    DisplayController.updateScore(Player('Os', 'O'));
+    DisplayController.updateScore(Player('Xs', PLAYER_X));
+    DisplayController.updateScore(Player('Os', PLAYER_O));
 });
