@@ -95,7 +95,9 @@ const GameController = (() => {
             } else {
                 switchPlayer();
             }
+            return true;
         }
+        return false;
     };
 
     // Function to handle win situation
@@ -182,13 +184,7 @@ const DisplayController = (() => {
         const cell = event.currentTarget;
         const index = Array.from(cells).indexOf(cell);
 
-        if (!GameController.gameStarted()) {
-            return;
-        }
-
-        GameController.playTurn(index);
-
-        if (GameBoard.getBoard()[index] !== '') {
+        if (GameController.playTurn(index)) {
             updateCellUI(index, GameBoard.getBoard());
             removeEventListenerFromCell(cell);
         }
@@ -201,9 +197,9 @@ const DisplayController = (() => {
     // Update ui
     const updateCellUI = (index, board) => {
         const cell = cells[index];
-        if (board[index] === 'X') {
+        if (board[index] === PLAYER_X) {
             cell.classList.add('x');
-        } else if (board[index] === 'O') {
+        } else if (board[index] === PLAYER_O) {
             cell.classList.add('o');
         }
     };
@@ -252,11 +248,9 @@ const DisplayController = (() => {
 
     // Function updates UI based on winner
     const updateWinnerUI = () => {
-        if (GameController.checkWin()) {
-            updateWinnerCells(cells);
-            updateWinner(GameController.getCurrentPlayer().name);
-            updateScore(GameController.getCurrentPlayer());
-        }
+        updateWinnerCells(cells);
+        updateWinner(GameController.getCurrentPlayer().name);
+        updateScore(GameController.getCurrentPlayer());
     };
 
     // Function to update UI if game is tie
@@ -288,7 +282,6 @@ const DisplayController = (() => {
 
 document.addEventListener('DOMContentLoaded', () => {
     DisplayController.updateButtonLabel();
-
     DisplayController.updateScore(Player('Xs', PLAYER_X));
     DisplayController.updateScore(Player('Os', PLAYER_O));
 });
