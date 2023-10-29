@@ -1,16 +1,10 @@
-// TODO refactor duplicated logic
-// add checkWin check for tie
-// refactor unnecessary function calls
-// refactor button function calls
-// add current player turn indicator class in html css
-
 // Game board module
 const GameBoard = (() => {
     // Array of cells
     let board = ['', '', '', '', '', '', '', '', ''];
 
     // Function to return current state of the board
-    const getBoard = () => board;
+    const getBoard = () => [...board];
 
     // Function to set cell on the board at index
     const setCell = (index, marker) => {
@@ -88,7 +82,6 @@ const GameController = (() => {
                 handleWin();
             } else if (checkTie()) {
                 handleTie();
-                console.log(handleTie())
             } else {
                 switchPlayer();
             }
@@ -102,7 +95,6 @@ const GameController = (() => {
         gameStarted = false;
         DisplayController.manageCellEvents(false);
         DisplayController.manageHoverClass(false);
-        console.log('win');
     };
 
     // Function to check winner
@@ -144,7 +136,6 @@ const GameController = (() => {
     // Function for resetting the game board
     const restartGame = () => {
         GameBoard.resetBoard();
-        console.log(GameBoard.getBoard());
         gameStarted = false;
         currentPlayer = player1;
     };
@@ -196,8 +187,9 @@ const DisplayController = (() => {
         }
 
         GameController.playTurn(index);
+
         if (GameBoard.getBoard()[index] !== '') {
-            updateUI(index, GameBoard.getBoard());
+            updateCellUI(index, GameBoard.getBoard());
             removeEventListenerFromCell(cell);
         }
     };
@@ -207,14 +199,12 @@ const DisplayController = (() => {
     };
 
     // Update ui
-    const updateUI = (index, board) => {
+    const updateCellUI = (index, board) => {
         const cell = cells[index];
         if (board[index] === 'X') {
             cell.classList.add('x');
         } else if (board[index] === 'O') {
             cell.classList.add('o');
-        } else {
-            clearBoard();
         }
     };
 
@@ -224,15 +214,6 @@ const DisplayController = (() => {
             cell.classList.remove('o');
             cell.classList.remove('cell-winner');
             winnerElement.textContent = '';
-        });
-    };
-
-    // Function to update the game board UI, and add click event
-    const renderBoard = () => {
-        const board = GameBoard.getBoard();
-
-        cells.forEach((cell, index) => {
-            updateUI(index, board);
         });
     };
 
@@ -286,20 +267,16 @@ const DisplayController = (() => {
     gameButton.addEventListener('click', () => {
         if (GameController.gameStarted()) {
             GameController.restartGame();
-            console.log('restart');
         } else {
             GameController.startGame();
-            console.log('start');
         }
-        console.log(GameBoard.getBoard());
         GameBoard.resetBoard();
         clearBoard();
         updateButtonLabel();
-        console.log('update');
     });
 
     return {
-        renderBoard,
+        // renderBoard,
         updateWinner,
         updateScore,
         updateButtonLabel,
@@ -311,8 +288,6 @@ const DisplayController = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initial render of the game board
-    DisplayController.renderBoard();
     DisplayController.updateButtonLabel();
 
     DisplayController.updateScore(Player('Xs', 'X'));
