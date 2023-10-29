@@ -1,6 +1,6 @@
 // TODO refactor duplicated logic
-// refactor unnecessary function calls
 // add checkWin check for tie
+// refactor unnecessary function calls
 // refactor button function calls
 // add current player turn indicator class in html css
 
@@ -86,6 +86,9 @@ const GameController = (() => {
             // Check for win or tie
             if (checkWin()) {
                 handleWin();
+            } else if (checkTie()) {
+                handleTie();
+                console.log(handleTie())
             } else {
                 switchPlayer();
             }
@@ -126,6 +129,18 @@ const GameController = (() => {
         return null;
     };
 
+    // Function for checking tie
+    const checkTie = () => {
+        const board = GameBoard.getBoard();
+        return board.every((cell) => cell != '') && !checkWin();
+    };
+
+    // Function to handle the UI updates and game state if game is tie
+    const handleTie = () => {
+        DisplayController.updateTieUI();
+        DisplayController.manageCellEvents(false);
+        DisplayController.manageHoverClass(false);
+    };
     // Function for resetting the game board
     const restartGame = () => {
         GameBoard.resetBoard();
@@ -263,6 +278,11 @@ const DisplayController = (() => {
         }
     };
 
+    // Function to update UI if game is tie
+    const updateTieUI = () => {
+        winnerElement.textContent = `It\'s a tie!`;
+    };
+
     gameButton.addEventListener('click', () => {
         if (GameController.gameStarted()) {
             GameController.restartGame();
@@ -286,6 +306,7 @@ const DisplayController = (() => {
         manageCellEvents,
         manageHoverClass,
         updateWinnerUI,
+        updateTieUI,
     };
 })();
 
