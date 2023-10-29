@@ -3,8 +3,8 @@ const EMPTY_CELL = '';
 const PLAYER_X = 'X';
 const PLAYER_O = 'O';
 const WINNING_COMBINATIONS = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
     [0, 4, 8], [2, 4, 6], // Diagonals
 ];
 
@@ -63,7 +63,6 @@ const GameController = (() => {
     const player1 = Player('Xs', PLAYER_X);
     const player2 = Player('Os', PLAYER_O);
 
-    // Current currentPlayer
     let currentPlayer = player1;
 
     // State of the game
@@ -75,7 +74,7 @@ const GameController = (() => {
         currentPlayer = player1;
     };
 
-    // Switch current currentPlayer
+    // Switch current player
     const switchPlayer = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
     };
@@ -85,6 +84,7 @@ const GameController = (() => {
     };
 
     // Function for marking cell with current players mark when cell is clicked
+    // and evaluating win and tie
     const playTurn = (index) => {
         if (GameBoard.setCell(index, currentPlayer.marker)) {
             // Check for win or tie
@@ -112,8 +112,8 @@ const GameController = (() => {
     // Function to check winner
     const checkWin = () => {
         const board = GameBoard.getBoard();
-        // Logic for checking win
 
+        // Logic for checking win
         for (let i = 0; i < WINNING_COMBINATIONS.length; i++) {
             const [a, b, c] = WINNING_COMBINATIONS[i];
             if (board[a] && board[a] === board[b] && board[a] === board[c]) {
@@ -135,7 +135,8 @@ const GameController = (() => {
         DisplayController.manageCellEvents(false);
         DisplayController.manageHoverClass(false);
     };
-    // Function for resetting the game board
+
+    // Function for restarting the game
     const restartGame = () => {
         GameBoard.resetBoard();
         gameStarted = false;
@@ -168,7 +169,7 @@ const DisplayController = (() => {
         }
     };
 
-    // Function to manage click events
+    // Function to manage click events based on game state
     const manageCellEvents = (add) => {
         cells.forEach((cell) => {
             if (add) {
@@ -204,7 +205,7 @@ const DisplayController = (() => {
         }
     };
 
-    const clearBoard = () => {
+    const clearBoardUI = () => {
         cells.forEach((cell) => {
             cell.classList.remove('x');
             cell.classList.remove('o');
@@ -265,7 +266,7 @@ const DisplayController = (() => {
             GameController.startGame();
         }
         GameBoard.resetBoard();
-        clearBoard();
+        clearBoardUI();
         updateButtonLabel();
     });
 
