@@ -147,6 +147,14 @@ header p {
     transform: scale(1.03);
 }
 
+.rules-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: smaller;
+}
+
 footer {
     margin-top: auto;
     display: flex;
