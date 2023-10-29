@@ -3,9 +3,14 @@ const EMPTY_CELL = '';
 const PLAYER_X = 'X';
 const PLAYER_O = 'O';
 const WINNING_COMBINATIONS = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-    [0, 4, 8], [2, 4, 6], // Diagonals
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8], // Rows
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8], // Columns
+    [0, 4, 8],
+    [2, 4, 6], // Diagonals
 ];
 
 // Game board module
@@ -269,6 +274,9 @@ const DisplayController = (() => {
         clearBoardUI();
         updateButtonLabel();
     });
+
+    // Sets default state of hover class for cells
+    manageHoverClass(false);
 
     return {
         updateWinner,
