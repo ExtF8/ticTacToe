@@ -280,9 +280,3 @@ const DisplayController = (() => {
         updateTieUI,
     };
 })();
-
-document.addEventListener('DOMContentLoaded', () => {
-    DisplayController.updateButtonLabel();
-    DisplayController.updateScore(Player('Xs', PLAYER_X));
-    DisplayController.updateScore(Player('Os', PLAYER_O));
-});
