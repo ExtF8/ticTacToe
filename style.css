@@ -85,12 +85,10 @@ header p {
 
 .cell:hover {
     transform: scale(1.03);
-    /* box-shadow: -3px 3px 5px 2px rgba(0, 0, 0, 0.1); */
 }
 
 .cell-winner {
-    --color: green;
-    /* transform: scale(1.19); */
+    --color: #049504;
 }
 
 .game-board.no-hover .cell:hover {
@@ -118,7 +116,7 @@ header p {
 
 .button-container {
     display: flex;
-    margin: 30px;
+    margin: 20px;
     justify-content: space-evenly;
 }
 
