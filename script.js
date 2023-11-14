@@ -65,10 +65,10 @@ const Player = (name, marker) => {
 // Game controller module
 const GameController = (() => {
     // Player objects
-    const player1 = Player('Xs', PLAYER_X);
-    const player2 = Player('Os', PLAYER_O);
+    const playerOne = Player('Xs', PLAYER_X);
+    const playerTwo = Player('Os', PLAYER_O);
 
-    let currentPlayer = player1;
+    let currentPlayer = playerOne;
 
     // State of the game
     let gameStarted = false;
@@ -76,12 +76,14 @@ const GameController = (() => {
     // Function to start the game
     const startGame = () => {
         gameStarted = true;
-        currentPlayer = player1;
+        currentPlayer = playerOne;
+        DisplayController.displayCurrentPlayer()
     };
 
     // Switch current player
     const switchPlayer = () => {
-        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
+        DisplayController.displayCurrentPlayer();
     };
 
     const getCurrentPlayer = () => {
@@ -104,7 +106,7 @@ const GameController = (() => {
         }
         return false;
     };
-    
+
     // Function to check winner
     const checkWin = () => {
         const board = GameBoard.getBoard();
@@ -128,7 +130,6 @@ const GameController = (() => {
         gameStarted = false;
     };
 
-
     // Function for checking tie
     const checkTie = () => {
         const board = GameBoard.getBoard();
@@ -147,7 +148,7 @@ const GameController = (() => {
     const restartGame = () => {
         GameBoard.resetBoard();
         gameStarted = false;
-        currentPlayer = player1;
+        currentPlayer = playerOne;
     };
 
     return {
@@ -212,12 +213,27 @@ const DisplayController = (() => {
         }
     };
 
+    // Update UI for current player
+    const displayCurrentPlayer = () => {
+        const playerOneElement = document.getElementById('symbol-x');
+        const playerTwoElement = document.getElementById('symbol-o');
+
+        if (GameController.getCurrentPlayer().marker === PLAYER_X) {
+            playerOneElement.classList.add('current-player');
+            playerTwoElement.classList.remove('current-player');
+        } else {
+            playerOneElement.classList.remove('current-player');
+            playerTwoElement.classList.add('current-player');
+        }
+    };
+
     const clearBoardUI = () => {
         cells.forEach((cell) => {
             cell.classList.remove('x');
             cell.classList.remove('o');
             cell.classList.remove('cell-winner');
             winnerElement.textContent = '';
+
         });
     };
 
@@ -288,5 +304,6 @@ const DisplayController = (() => {
         manageHoverClass,
         updateWinnerUI,
         updateTieUI,
+        displayCurrentPlayer,
     };
 })();
