@@ -77,7 +77,7 @@ const GameController = (() => {
     const startGame = () => {
         gameStarted = true;
         currentPlayer = playerOne;
-        DisplayController.displayCurrentPlayer()
+        DisplayController.displayCurrentPlayer();
     };
 
     // Switch current player
@@ -207,9 +207,9 @@ const DisplayController = (() => {
     const updateCellUI = (index, board) => {
         const cell = cells[index];
         if (board[index] === PLAYER_X) {
-            cell.classList.add('x');
+            cell.classList.add('x', 'marked');
         } else if (board[index] === PLAYER_O) {
-            cell.classList.add('o');
+            cell.classList.add('o', 'marked');
         }
     };
 
@@ -229,11 +229,8 @@ const DisplayController = (() => {
 
     const clearBoardUI = () => {
         cells.forEach((cell) => {
-            cell.classList.remove('x');
-            cell.classList.remove('o');
-            cell.classList.remove('cell-winner');
+            cell.classList.remove('x', 'o', 'cell-winner', 'marked');
             winnerElement.textContent = '';
-
         });
     };
 

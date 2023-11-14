@@ -83,7 +83,7 @@ header p {
     touch-action: manipulation;
 }
 
-.cell:hover {
+.cell:not(.marked):hover {
     transform: scale(1.03);
 }
 
