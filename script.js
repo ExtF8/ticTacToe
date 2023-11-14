@@ -3,14 +3,14 @@ const EMPTY_CELL = '';
 const PLAYER_X = 'X';
 const PLAYER_O = 'O';
 const WINNING_COMBINATIONS = [
-    [0, 1, 2],
+    [0, 1, 2], // Rows
     [3, 4, 5],
-    [6, 7, 8], // Rows
-    [0, 3, 6],
+    [6, 7, 8],
+    [0, 3, 6], // Columns
     [1, 4, 7],
-    [2, 5, 8], // Columns
-    [0, 4, 8],
+    [2, 5, 8],
     [2, 4, 6], // Diagonals
+    [0, 4, 8],
 ];
 
 // Game board module
@@ -104,16 +104,7 @@ const GameController = (() => {
         }
         return false;
     };
-
-    // Function to handle win situation
-    const handleWin = () => {
-        currentPlayer.incrementScore();
-        DisplayController.updateWinnerUI();
-        gameStarted = false;
-        DisplayController.manageCellEvents(false);
-        DisplayController.manageHoverClass(false);
-    };
-
+    
     // Function to check winner
     const checkWin = () => {
         const board = GameBoard.getBoard();
@@ -128,6 +119,16 @@ const GameController = (() => {
         return null;
     };
 
+    // Function to handle win situation
+    const handleWin = () => {
+        currentPlayer.incrementScore();
+        DisplayController.updateWinnerUI();
+        DisplayController.manageCellEvents(false);
+        DisplayController.manageHoverClass(false);
+        gameStarted = false;
+    };
+
+
     // Function for checking tie
     const checkTie = () => {
         const board = GameBoard.getBoard();
@@ -139,6 +140,7 @@ const GameController = (() => {
         DisplayController.updateTieUI();
         DisplayController.manageCellEvents(false);
         DisplayController.manageHoverClass(false);
+        gameStarted = false;
     };
 
     // Function for restarting the game
