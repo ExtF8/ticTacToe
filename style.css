@@ -157,6 +157,7 @@ header p {
     align-items: center;
     gap: 4px;
     font-size: smaller;
+    margin-top: 8px;
 }
 
 footer {
