@@ -1,3 +1,7 @@
+// TODO
+// Create separate modules for computer and game mode
+
+
 // Constants
 const EMPTY_CELL = '';
 const PLAYER_X = 'X';
