@@ -94,14 +94,23 @@
                     <p>·</p>
                     <p>·</p>
                 </div>
-                <div id="gameMode">
+                <!-- Radio buttons fro game mode -->
+                <div class="game-mode-selection">
                     <label>
-                        <input type="radio" name="mode" value="pvp" checked> Player vs Player
+                        <input
+                            type="radio"
+                            name="gameMode"
+                            value="human"
+                            checked
+                        />
+                        Human vs. Human
                     </label>
                     <label>
-                        <input type="radio" name="mode" value="pvc"> Player vs Computer
+                        <input type="radio" name="gameMode" value="computer" />
+                        Human vs. Computer
                     </label>
                 </div>
+
                 <div class="rules-container">
                     <p>Choose game mode</p>
                     <p>Press 'Start Game' to begin the game :)</p>

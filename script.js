@@ -73,6 +73,33 @@ const GameController = (() => {
     // State of the game
     let gameStarted = false;
 
+    // default game mode
+    let gameMode = 'human';
+    const setGameMode = (mode) => {
+        gameMode = mode;
+    };
+
+    const computerPlay = () => {
+        // Random move logic
+        let availableCells = GameBoard.getBoard()
+            .map((cell, index) => (cell === EMPTY_CELL ? index : null))
+            .filter((i) => i !== null);
+        if (availableCells.length > 0) {
+            let randomCell =
+                availableCells[
+                    Math.floor(Math.random() * availableCells.length)
+                ];
+            playTurn(randomCell);
+        }
+    };
+
+    // Game mode selection logic
+    document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
+        input.addEventListener('change', (e) => {
+            setGameMode(e.target.value);
+        });
+    });
+
     // Function to start the game
     const startGame = () => {
         gameStarted = true;
@@ -84,6 +111,10 @@ const GameController = (() => {
     const switchPlayer = () => {
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
         DisplayController.displayCurrentPlayer();
+        if (gameMode === 'computer' && currentPlayer.marker === PLAYER_O) {
+            setTimeout(computerPlay, 1000);
+        }
+        console.log(currentPlayer)
     };
 
     const getCurrentPlayer = () => {
@@ -94,6 +125,7 @@ const GameController = (() => {
     // and evaluating win and tie
     const playTurn = (index) => {
         if (GameBoard.setCell(index, currentPlayer.marker)) {
+            DisplayController.updateCellUI(index, GameBoard.getBoard())
             // Check for win or tie
             if (checkWin()) {
                 handleWin();
@@ -302,5 +334,6 @@ const DisplayController = (() => {
         updateWinnerUI,
         updateTieUI,
         displayCurrentPlayer,
+        updateCellUI,
     };
 })();
