@@ -114,7 +114,6 @@ const GameController = (() => {
         if (gameMode === 'computer' && currentPlayer.marker === PLAYER_O) {
             setTimeout(computerPlay, 1000);
         }
-        console.log(currentPlayer)
     };
 
     const getCurrentPlayer = () => {
@@ -125,6 +124,7 @@ const GameController = (() => {
     // and evaluating win and tie
     const playTurn = (index) => {
         if (GameBoard.setCell(index, currentPlayer.marker)) {
+            // Updates cell UI of computers chosen cell
             DisplayController.updateCellUI(index, GameBoard.getBoard())
             // Check for win or tie
             if (checkWin()) {
@@ -190,6 +190,7 @@ const GameController = (() => {
         gameStarted: () => gameStarted,
         getCurrentPlayer,
         checkWin,
+        gameMode,
     };
 })();
 
