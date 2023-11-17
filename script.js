@@ -1,7 +1,6 @@
 // TODO
 // Create separate modules for computer and game mode
 
-
 // Constants
 const EMPTY_CELL = '';
 const PLAYER_X = 'X';
@@ -77,30 +76,17 @@ const GameController = (() => {
     // State of the game
     let gameStarted = false;
 
-    // default game mode
-    let gameMode = 'human';
-    const setGameMode = (mode) => {
-        gameMode = mode;
-    };
-
     const computerPlay = () => {
-        // Random move logic
-        let availableCells = GameBoard.getBoard()
-            .map((cell, index) => (cell === EMPTY_CELL ? index : null))
-            .filter((i) => i !== null);
-        if (availableCells.length > 0) {
-            let randomCell =
-                availableCells[
-                    Math.floor(Math.random() * availableCells.length)
-                ];
-            playTurn(randomCell);
+        if (GameModeController.getGameMode() === 'computer') {
+            const move = ComputerPlayer.makeMove('easy', GameBoard.getBoard());
+            playTurn(move);
         }
     };
 
     // Game mode selection logic
     document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
         input.addEventListener('change', (e) => {
-            setGameMode(e.target.value);
+            GameModeController.setGameMode(e.target.value);
         });
     });
 
@@ -115,8 +101,8 @@ const GameController = (() => {
     const switchPlayer = () => {
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
         DisplayController.displayCurrentPlayer();
-        if (gameMode === 'computer' && currentPlayer.marker === PLAYER_O) {
-            setTimeout(computerPlay, 1000);
+        if (GameModeController.getGameMode() === 'computer' && currentPlayer.marker === PLAYER_O) {
+            setTimeout(computerPlay, 500);
         }
     };
 
@@ -129,7 +115,7 @@ const GameController = (() => {
     const playTurn = (index) => {
         if (GameBoard.setCell(index, currentPlayer.marker)) {
             // Updates cell UI of computers chosen cell
-            DisplayController.updateCellUI(index, GameBoard.getBoard())
+            DisplayController.updateCellUI(index, GameBoard.getBoard());
             // Check for win or tie
             if (checkWin()) {
                 handleWin();
@@ -194,7 +180,55 @@ const GameController = (() => {
         gameStarted: () => gameStarted,
         getCurrentPlayer,
         checkWin,
-        gameMode,
+        computerPlay,
+    };
+})();
+
+// Game mode module
+const GameModeController = (() => {
+    // default game mode
+    let gameMode = 'human';
+
+    const setGameMode = (mode) => {
+        gameMode = mode;
+    };
+
+    const getGameMode = () => gameMode;
+
+    return {
+        setGameMode,
+        getGameMode,
+    };
+})();
+
+// Computer player module
+const ComputerPlayer = (() => {
+    // Computer moves
+    const makeMove = (difficulty, board) => {
+        switch (difficulty) {
+            case 'easy':
+                return makeRandomMove(board);
+        }
+    };
+
+    // Functions for random, medium and hard levels
+    // Logic for random move
+    const makeRandomMove = (board) => {
+        let availableCells = board
+            .map((cell, index) => (cell === EMPTY_CELL ? index : null))
+            .filter((i) => i !== null);
+
+        return availableCells[
+            Math.floor(Math.random() * availableCells.length)
+        ];
+    };
+
+    // Logic for medium move
+
+    // Logic for hard move
+
+    return {
+        makeMove,
     };
 })();
 
