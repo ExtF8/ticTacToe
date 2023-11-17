@@ -78,12 +78,17 @@ const GameController = (() => {
 
     const computerPlay = () => {
         if (GameModeController.getGameMode() === 'computer') {
-            const move = ComputerPlayer.makeMove('easy', GameBoard.getBoard());
+            const move = ComputerPlayer.makeMove(
+                'hard',
+                GameBoard.getBoard()
+            );
+            console.log(move);
             playTurn(move);
         }
     };
 
     // Game mode selection logic
+    // Possibly move to Display Controller module
     document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
         input.addEventListener('change', (e) => {
             GameModeController.setGameMode(e.target.value);
@@ -101,8 +106,11 @@ const GameController = (() => {
     const switchPlayer = () => {
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
         DisplayController.displayCurrentPlayer();
-        if (GameModeController.getGameMode() === 'computer' && currentPlayer.marker === PLAYER_O) {
-            setTimeout(computerPlay, 500);
+        if (
+            GameModeController.getGameMode() === 'computer' &&
+            currentPlayer.marker === PLAYER_O
+        ) {
+            setTimeout(computerPlay, 1000);
         }
     };
 
@@ -208,6 +216,12 @@ const ComputerPlayer = (() => {
         switch (difficulty) {
             case 'easy':
                 return makeRandomMove(board);
+            case 'medium':
+                return makeMediumMove(board);
+            case 'hard':
+                return makeHardMove(board);
+            default:
+                console.log('invalid difficulty level');
         }
     };
 
@@ -224,9 +238,113 @@ const ComputerPlayer = (() => {
     };
 
     // Logic for medium move
+    const makeMediumMove = (board) => {
+        // Check if move can win the game
+        let winMove = findWinningMove(board, PLAYER_O);
+        if (winMove !== -1) return winMove;
+
+        // Block opponent's winning move
+        let blockMove = findWinningMove(board, PLAYER_X);
+        if (blockMove !== -1) return blockMove;
+
+        return makeRandomMove(board);
+    };
 
     // Logic for hard move
+    const makeHardMove = (board) => {
+        console.log('test')
+        return minmax(board, PLAYER_O).index;
+    };
 
+    // MinMax function
+    const minmax = (newBoard, player) => {
+        console.log('min max started')
+        // Check available cells
+        let availableCells = newBoard
+            .map((cell, index) => (cell === EMPTY_CELL ? index : null))
+            .filter((i) => i !== null);
+
+        // Check for terminal states (win, lose, tie)
+        if (GameController.checkWin(newBoard, PLAYER_X)) {
+            console.lop(score)
+            return { score: -10 };
+        } else if (GameController.checkWin(newBoard, PLAYER_O)) {
+            console.lop(score)
+
+            return { score: 10 };
+        } else if (availableCells.length === 0) {
+            return { score: 0 };
+        }
+
+        // Collect the scores from each empty cell
+        let moves = [];
+        for (let i = 0; (i < availableCells.length); i++) {
+            let move = {};
+            move.index = newBoard[availableCells[i]];
+            newBoard[availableCells[i]] = player;
+
+            if (player == PLAYER_O) {
+                let result = minmax(newBoard, PLAYER_X);
+                move.score = result.score;
+            } else {
+                let result = minmax(newBoard, PLAYER_O);
+                move.score = result.score;
+            }
+
+            newBoard[availableCells[i]] = move.index;
+            moves.push(move);
+        }
+
+        // Choose the best move
+        let bestMove;
+        if (player === PLAYER_O) {
+            let bestScore = -10000;
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score > bestScore) {
+                    bestScore = moves[i].score;
+                    bestMove = i;
+                }
+            }
+        } else {
+            let bestScore = 10000;
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score < bestScore) {
+                    bestScore = moves[i].score;
+                    bestMove = i;
+                }
+            }
+        }
+
+        return moves[bestMove];
+    };
+
+    // Helper function to find a winning move
+    const findWinningMove = (board, player) => {
+        for (let [a, b, c] of WINNING_COMBINATIONS) {
+            if (
+                board[a] === player &&
+                board[a] === board[b] &&
+                board[c] === EMPTY_CELL
+            ) {
+                return c;
+            }
+            if (
+                board[a] === player &&
+                board[a] === board[c] &&
+                board[b] === EMPTY_CELL
+            ) {
+                return b;
+            }
+            if (
+                board[a] === player &&
+                board[a] === board[c] &&
+                board[a] === EMPTY_CELL
+            ) {
+                return a;
+            }
+        }
+        return -1;
+    };
     return {
         makeMove,
     };
