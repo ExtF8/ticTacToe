@@ -413,6 +413,7 @@ const DisplayController = (() => {
 
             GameModeController.setGameMode(e.target.value);
             GameController.restartGame();
+            updateButtonLabel();
         });
     });
 
@@ -431,6 +432,7 @@ const DisplayController = (() => {
 
             GameModeController.setDifficultyLevel(e.target.value);
             GameController.restartGame();
+            updateButtonLabel();
         });
 
     // Function to manage hover class based on game state
