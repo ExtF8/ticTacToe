@@ -1,6 +1,3 @@
-// TODO
-// Create separate modules for computer and game mode
-
 // Constants
 const EMPTY_CELL = '';
 const PLAYER_X = 'X';
@@ -140,11 +137,7 @@ const GameController = (() => {
 
         for (let i = 0; i < WINNING_COMBINATIONS.length; i++) {
             const [a, b, c] = WINNING_COMBINATIONS[i];
-            if (
-                board[a] &&
-                board[a] === board[b] &&
-                board[a] === board[c]
-            ) {
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
                 return WINNING_COMBINATIONS[i]; // Returns the winning combination
             }
         }
@@ -250,15 +243,7 @@ const ComputerPlayer = (() => {
         return makeRandomMove(board);
     };
 
-    // Logic for hard move
-    const makeHardMove = (board) => {
-        console.log('make hard move');
-        return minimax(board);
-    };
-
-    // MiniMax function
-
-    // Helper function to find a winning move
+    // Helper function to find a winning move for medium move
     const findWinningMove = (board, player) => {
         for (let [a, b, c] of WINNING_COMBINATIONS) {
             // Check if two cells in the combination have the player's marker and one is empty
@@ -287,6 +272,108 @@ const ComputerPlayer = (() => {
         // return -1 if no winning move is found
         return -1;
     };
+    // Logic for hard move
+    const makeHardMove = (board) => {
+        console.log('make hard move');
+        let bestVal = -Infinity;
+        let bestMove = -1;
+
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === EMPTY_CELL) {
+                board[i] = PLAYER_O;
+                let moveVal = minimax(board, 0, false);
+                board[i] = EMPTY_CELL;
+
+                if (moveVal > bestVal) {
+                    bestMove = i;
+                    bestVal = moveVal;
+                }
+            }
+        }
+        console.log('Best move:', bestMove)
+        return bestMove;
+    };
+
+
+    // MiniMax
+    // Function to evaluate the game's state
+    const evaluate = (board) => {
+        for (let [a, b, c] of WINNING_COMBINATIONS) {
+            if (
+                board[a] === PLAYER_O &&
+                board[a] === board[b] &&
+                board[a] === board[c]
+            ) {
+                return +10;
+            } else if (
+                board[a] === PLAYER_X &&
+                board[a] === board[b] &&
+                board[a] === board[c]
+            ) {
+                return -10;
+            }
+        }
+        return 0;
+    };
+
+    // Minimax function
+    const minimax = (board, depth, isMaximizing) => {
+        let score = evaluate(board);
+
+        // if maximizer has won the game return evaluated score
+        if (score === 10) {
+            return score - depth;
+        }
+
+        // if minimizer has won the game return evaluated score
+        if (score === -10) {
+            return score + depth;
+        }
+
+        // If there are no more moves and no winner then it is a tie
+        if (!board.includes(EMPTY_CELL)) return 0;
+        // console.log(score);
+
+        if (isMaximizing) {
+            let best = -Infinity;
+
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === EMPTY_CELL) {
+                    // make the move
+                    board[i] = PLAYER_O;
+                    // Call minimax recursively and choose the max value
+                    best = Math.max(
+                        best,
+                        minimax(board, depth + 1, !isMaximizing)
+                    );
+                    // Undo the move
+                    board[i] = EMPTY_CELL;
+                }
+            }
+            console.log('-Infinity best:', best)
+            return best;
+        } else {
+            let best = Infinity;
+
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === EMPTY_CELL) {
+                    // make the move
+                    board[i] = PLAYER_X;
+                    // Call minimax recursively and choose the min value
+                    best = Math.min(
+                        best,
+                        minimax(board, depth + 1, !isMaximizing)
+                    );
+                    // Undo the move
+                    board[i] = EMPTY_CELL;
+                }
+            }
+            console.log('Infinity best:', best)
+
+            return best;
+        }
+    };
+
     return {
         makeMove,
     };
