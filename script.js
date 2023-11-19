@@ -76,7 +76,10 @@ const GameController = (() => {
     const computerPlay = () => {
         if (GameModeController.getGameMode() === 'computer') {
             const difficulty = GameModeController.getDifficultyLevel();
-            const move = ComputerPlayer.makeMove(difficulty, GameBoard.getBoard());
+            const move = ComputerPlayer.makeMove(
+                difficulty,
+                GameBoard.getBoard()
+            );
             playTurn(move);
         }
     };
@@ -385,6 +388,16 @@ const DisplayController = (() => {
     // Event listener for the game mode and difficulty level selections
     document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
         input.addEventListener('change', (e) => {
+            if (
+                GameController.gameStarted() &&
+                !confirm(
+                    'Changing the game mode will reset the current game. Continue?'
+                )
+            ) {
+                e.preventDefault(); // Prevent changing the game mode
+                return; // Exit the event handler
+            }
+
             GameModeController.setGameMode(e.target.value);
             if (e.target.value === 'computer') {
                 // Update computer players behavior based on difficulty level
@@ -392,13 +405,25 @@ const DisplayController = (() => {
                     document.getElementById('difficultyLevels').value;
                 GameModeController.setDifficultyLevel(difficultyLevel);
             }
+            GameController.restartGame();
         });
     });
 
     document
         .getElementById('difficultyLevels')
         .addEventListener('change', (e) => {
+            if (
+                GameController.gameStarted() &&
+                !confirm(
+                    'Changing the game mode will reset the current game. Continue?'
+                )
+            ) {
+                e.preventDefault(); // Prevent changing the game mode
+                return; // Exit the event handler
+            }
+
             GameModeController.setDifficultyLevel(e.target.value);
+            GameController.restartGame();
         });
 
     // Function to manage hover class based on game state
