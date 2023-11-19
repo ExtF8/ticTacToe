@@ -173,6 +173,10 @@ select {
     line-height: inherit;
 }
 
+.hidden {
+    display: none;
+}
+
 .rules-container {
     display: flex;
     flex-direction: column;

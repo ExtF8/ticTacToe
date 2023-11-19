@@ -388,23 +388,30 @@ const DisplayController = (() => {
     // Event listener for the game mode and difficulty level selections
     document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
         input.addEventListener('change', (e) => {
+            const difficultySelection = document.querySelector(
+                '.difficulty-level-selection'
+            );
+
+            if (e.target.value === 'computer') {
+                difficultySelection.classList.remove('hidden'); // Show difficulty selection
+                const difficultyLevel =
+                    document.getElementById('difficultyLevels').value;
+                GameModeController.setDifficultyLevel(difficultyLevel);
+            } else {
+                difficultySelection.classList.add('hidden'); // Hide difficulty selection
+            }
+
             if (
                 GameController.gameStarted() &&
                 !confirm(
                     'Changing the game mode will reset the current game. Continue?'
                 )
             ) {
-                e.preventDefault(); // Prevent changing the game mode
-                return; // Exit the event handler
+                e.preventDefault();
+                return;
             }
 
             GameModeController.setGameMode(e.target.value);
-            if (e.target.value === 'computer') {
-                // Update computer players behavior based on difficulty level
-                const difficultyLevel =
-                    document.getElementById('difficultyLevels').value;
-                GameModeController.setDifficultyLevel(difficultyLevel);
-            }
             GameController.restartGame();
         });
     });
@@ -563,3 +570,15 @@ const DisplayController = (() => {
         updateCellUI,
     };
 })();
+
+window.onload = () => {
+    const defaultGameMode = GameModeController.getGameMode();
+    const difficultySelection = document.querySelector(
+        '.difficulty-level-selection'
+    );
+    if (defaultGameMode === 'computer') {
+        difficultySelection.classList.remove('hidden');
+    } else {
+        difficultySelection.classList.add('hidden');
+    }
+};
