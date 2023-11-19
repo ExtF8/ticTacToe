@@ -78,11 +78,8 @@ const GameController = (() => {
 
     const computerPlay = () => {
         if (GameModeController.getGameMode() === 'computer') {
-            const move = ComputerPlayer.makeMove(
-                'hard',
-                GameBoard.getBoard()
-            );
-            console.log(move);
+            const move = ComputerPlayer.makeMove('hard', GameBoard.getBoard());
+            console.log('Computer play move:', move);
             playTurn(move);
         }
     };
@@ -141,14 +138,17 @@ const GameController = (() => {
     const checkWin = () => {
         const board = GameBoard.getBoard();
 
-        // Logic for checking win
         for (let i = 0; i < WINNING_COMBINATIONS.length; i++) {
             const [a, b, c] = WINNING_COMBINATIONS[i];
-            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                return WINNING_COMBINATIONS[i];
+            if (
+                board[a] &&
+                board[a] === board[b] &&
+                board[a] === board[c]
+            ) {
+                return WINNING_COMBINATIONS[i]; // Returns the winning combination
             }
         }
-        return null;
+        return null; // Returns null if no winner
     };
 
     // Function to handle win situation
@@ -252,97 +252,39 @@ const ComputerPlayer = (() => {
 
     // Logic for hard move
     const makeHardMove = (board) => {
-        console.log('test')
-        return minmax(board, PLAYER_O).index;
+        console.log('make hard move');
+        return minimax(board);
     };
 
-    // MinMax function
-    const minmax = (newBoard, player) => {
-        console.log('min max started')
-        // Check available cells
-        let availableCells = newBoard
-            .map((cell, index) => (cell === EMPTY_CELL ? index : null))
-            .filter((i) => i !== null);
-
-        // Check for terminal states (win, lose, tie)
-        if (GameController.checkWin(newBoard, PLAYER_X)) {
-            console.lop(score)
-            return { score: -10 };
-        } else if (GameController.checkWin(newBoard, PLAYER_O)) {
-            console.lop(score)
-
-            return { score: 10 };
-        } else if (availableCells.length === 0) {
-            return { score: 0 };
-        }
-
-        // Collect the scores from each empty cell
-        let moves = [];
-        for (let i = 0; (i < availableCells.length); i++) {
-            let move = {};
-            move.index = newBoard[availableCells[i]];
-            newBoard[availableCells[i]] = player;
-
-            if (player == PLAYER_O) {
-                let result = minmax(newBoard, PLAYER_X);
-                move.score = result.score;
-            } else {
-                let result = minmax(newBoard, PLAYER_O);
-                move.score = result.score;
-            }
-
-            newBoard[availableCells[i]] = move.index;
-            moves.push(move);
-        }
-
-        // Choose the best move
-        let bestMove;
-        if (player === PLAYER_O) {
-            let bestScore = -10000;
-            for (let i = 0; i < moves.length; i++) {
-                if (moves[i].score > bestScore) {
-                    bestScore = moves[i].score;
-                    bestMove = i;
-                }
-            }
-        } else {
-            let bestScore = 10000;
-            for (let i = 0; i < moves.length; i++) {
-                if (moves[i].score < bestScore) {
-                    bestScore = moves[i].score;
-                    bestMove = i;
-                }
-            }
-        }
-
-        return moves[bestMove];
-    };
+    // MiniMax function
 
     // Helper function to find a winning move
     const findWinningMove = (board, player) => {
         for (let [a, b, c] of WINNING_COMBINATIONS) {
+            // Check if two cells in the combination have the player's marker and one is empty
             if (
                 board[a] === player &&
-                board[a] === board[b] &&
+                board[b] === player &&
                 board[c] === EMPTY_CELL
             ) {
                 return c;
             }
             if (
                 board[a] === player &&
-                board[a] === board[c] &&
+                board[c] === player &&
                 board[b] === EMPTY_CELL
             ) {
                 return b;
             }
             if (
-                board[a] === player &&
-                board[a] === board[c] &&
+                board[b] === player &&
+                board[c] === player &&
                 board[a] === EMPTY_CELL
             ) {
                 return a;
             }
         }
+        // return -1 if no winning move is found
         return -1;
     };
     return {
