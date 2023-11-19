@@ -75,19 +75,11 @@ const GameController = (() => {
 
     const computerPlay = () => {
         if (GameModeController.getGameMode() === 'computer') {
-            const move = ComputerPlayer.makeMove('hard', GameBoard.getBoard());
-            console.log('Computer play move:', move);
+            const difficulty = GameModeController.getDifficultyLevel();
+            const move = ComputerPlayer.makeMove(difficulty, GameBoard.getBoard());
             playTurn(move);
         }
     };
-
-    // Game mode selection logic
-    // Possibly move to Display Controller module
-    document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
-        input.addEventListener('change', (e) => {
-            GameModeController.setGameMode(e.target.value);
-        });
-    });
 
     // Function to start the game
     const startGame = () => {
@@ -189,6 +181,8 @@ const GameController = (() => {
 const GameModeController = (() => {
     // default game mode
     let gameMode = 'human';
+    // default difficulty level
+    let difficultyLevel = 'easy';
 
     const setGameMode = (mode) => {
         gameMode = mode;
@@ -196,9 +190,17 @@ const GameModeController = (() => {
 
     const getGameMode = () => gameMode;
 
+    const setDifficultyLevel = (level) => {
+        difficultyLevel = level;
+    };
+
+    const getDifficultyLevel = () => difficultyLevel;
+
     return {
         setGameMode,
         getGameMode,
+        setDifficultyLevel,
+        getDifficultyLevel,
     };
 })();
 
@@ -208,19 +210,20 @@ const ComputerPlayer = (() => {
     const makeMove = (difficulty, board) => {
         switch (difficulty) {
             case 'easy':
-                return makeRandomMove(board);
+                return makeEasyMove(board);
             case 'medium':
                 return makeMediumMove(board);
             case 'hard':
                 return makeHardMove(board);
             default:
                 console.log('invalid difficulty level');
+                return makeEasyMove(board);
         }
     };
 
     // Functions for random, medium and hard levels
     // Logic for random move
-    const makeRandomMove = (board) => {
+    const makeEasyMove = (board) => {
         let availableCells = board
             .map((cell, index) => (cell === EMPTY_CELL ? index : null))
             .filter((i) => i !== null);
@@ -240,7 +243,7 @@ const ComputerPlayer = (() => {
         let blockMove = findWinningMove(board, PLAYER_X);
         if (blockMove !== -1) return blockMove;
 
-        return makeRandomMove(board);
+        return makeEasyMove(board);
     };
 
     // Helper function to find a winning move for medium move
@@ -274,7 +277,6 @@ const ComputerPlayer = (() => {
     };
     // Logic for hard move
     const makeHardMove = (board) => {
-        console.log('make hard move');
         let bestVal = -Infinity;
         let bestMove = -1;
 
@@ -290,10 +292,8 @@ const ComputerPlayer = (() => {
                 }
             }
         }
-        console.log('Best move:', bestMove)
         return bestMove;
     };
-
 
     // MiniMax
     // Function to evaluate the game's state
@@ -332,7 +332,6 @@ const ComputerPlayer = (() => {
 
         // If there are no more moves and no winner then it is a tie
         if (!board.includes(EMPTY_CELL)) return 0;
-        // console.log(score);
 
         if (isMaximizing) {
             let best = -Infinity;
@@ -350,7 +349,6 @@ const ComputerPlayer = (() => {
                     board[i] = EMPTY_CELL;
                 }
             }
-            console.log('-Infinity best:', best)
             return best;
         } else {
             let best = Infinity;
@@ -368,8 +366,6 @@ const ComputerPlayer = (() => {
                     board[i] = EMPTY_CELL;
                 }
             }
-            console.log('Infinity best:', best)
-
             return best;
         }
     };
@@ -385,6 +381,25 @@ const DisplayController = (() => {
     const winnerElement = document.getElementById('winner');
     const gameButton = document.getElementById('gameButton');
     const gameBoardContainer = document.querySelector('.game-board');
+
+    // Event listener for the game mode and difficulty level selections
+    document.querySelectorAll('input[name="gameMode"]').forEach((input) => {
+        input.addEventListener('change', (e) => {
+            GameModeController.setGameMode(e.target.value);
+            if (e.target.value === 'computer') {
+                // Update computer players behavior based on difficulty level
+                const difficultyLevel =
+                    document.getElementById('difficultyLevels').value;
+                GameModeController.setDifficultyLevel(difficultyLevel);
+            }
+        });
+    });
+
+    document
+        .getElementById('difficultyLevels')
+        .addEventListener('change', (e) => {
+            GameModeController.setDifficultyLevel(e.target.value);
+        });
 
     // Function to manage hover class based on game state
     const manageHoverClass = (add) => {
